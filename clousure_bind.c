@@ -88,13 +88,13 @@ static void gen_machine_code(uint8_t* code, void(* function)(void*), void* conte
 
 void (*clousure_bind(void(* function)(void*), void* context))(void) {
     int pagesize = getpagesize();
-    if (pagesize < 0) {
+    if (pagesize < 0 || pagesize < 2048) {
         perror("getpagesize");
         return NULL;
     }
     unsigned char* ret = memalign(pagesize, pagesize);
     gen_machine_code(ret, function, context);
-    if (mprotect(ret, pagesize, PROT_EXEC | PROT_WRITE | PROT_READ) < 0) {
+    if (mprotect(ret, pagesize, PROT_EXEC) < 0) {
         perror("mprotect");
         return NULL;
     }
