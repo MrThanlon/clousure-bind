@@ -94,7 +94,7 @@ void (*clousure_bind(void(* function)(void*), void* context))(void) {
     }
     unsigned char* ret = memalign(pagesize, pagesize);
     gen_machine_code(ret, function, context);
-    if (mprotect(ret, pagesize, PROT_EXEC) < 0) {
+    if (mprotect(ret, pagesize, PROT_EXEC | PROT_READ) < 0) {
         perror("mprotect");
         return NULL;
     }
