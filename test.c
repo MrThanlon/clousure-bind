@@ -15,7 +15,7 @@ int main(void) {
     if (fp2 != NULL) {
         fp2();
     }
-    free((void*)fp1);
-    free((void*)fp2);
+    clousure_bind_free((void*)fp1);
+    clousure_bind_free((void*)fp2);
     return 0;
 }

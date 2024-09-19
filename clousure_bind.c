@@ -86,9 +86,13 @@ static void gen_machine_code(uint8_t* code, void(* function)(void*), void* conte
 #endif
 }
 
+static int pagesize = -1;
+
 void (*clousure_bind(void(* function)(void*), void* context))(void) {
-    int pagesize = getpagesize();
-    if (pagesize < 0 || pagesize < 2048) {
+    if (pagesize < 0) {
+        pagesize = getpagesize();
+    }
+    if (pagesize < 0) {
         perror("getpagesize");
         return NULL;
     }
@@ -99,4 +103,9 @@ void (*clousure_bind(void(* function)(void*), void* context))(void) {
         return NULL;
     }
     return (void (*)(void))ret;
+}
+
+void clousure_bind_free(void(* function)(void*)) {
+    mprotect(function, pagesize, PROT_READ | PROT_WRITE);
+    free((void*)function);
 }

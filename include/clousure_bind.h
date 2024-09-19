@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 void (*clousure_bind(void(* function)(void*), void* context))(void);
+void clousure_bind_free(void(* function)(void*));
 
 #ifdef __cplusplus
 }
